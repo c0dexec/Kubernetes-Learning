@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+# Type of resource, Deployment
+kind: Deployment
+# Pod details
+metadata:
+  name: ubuntu-deployment
+  namespace: alpha
+# Pod specs
+spec:
+  replicas: 1
+  # Pod management requirements for ReplicaSets
+  selector:
+    matchLabels:
+      tier: backend
+  # Template for Pods, metadata which contains its lables
+  template:
+    metadata:
+      labels:
+        tier: backend
+    # Container spec
+    spec:
+      containers:
+        - name: ubuntu
+          image: ubuntu
+          # Environment variables being specifed for the container.
+          env:
+          - name: ENV1
+            value: "Hello from the Environment variable"
+          - name: ENV2
+            value: "Syed Yasim Mustafa Jaffery is back."
+          # Lists environment variables
+          command: ["tail"]
+          args: ["-f","/dev/null"]
+      restartPolicy: Always

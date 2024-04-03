@@ -1,0 +1,16 @@
+# "apiVersion", "v1" is used for Pods
+apiVersion: v1
+# "kind" specifies the type of respource
+kind: Pod
+# "metadata" contains Pod details
+metadata:
+# Pod Name
+  name: testpod
+# "spec" Contains container details which can be more than one
+spec:
+  containers:
+    - name: test
+      image: ubuntu
+      command: ['sh', '-c','echo Syed Yasim Mustafa Jaffery is BACK!!! && sleep 60']
+    # "restartPolicy" set for the containers within "containers"
+  restartPolicy: Never

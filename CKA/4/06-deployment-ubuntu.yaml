@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+# Type of resource, Deployment
+kind: Deployment
+# Pod details
+metadata:
+  name: ubuntu-deployment
+  namespace: alpha
+# Pod specs
+spec:
+  replicas: 1
+  # Pod management requirements for ReplicaSets
+  selector:
+    matchLabels:
+      tier: backend
+  # Template for Pods, metadata which contains its lables
+  template:
+    metadata:
+      labels:
+        tier: backend
+    # Container spec
+    spec:
+      containers:
+        - name: ubuntu
+          image: ubuntu
+          # Lists environment variables
+          command: ["printenv"]
+          args: ["HOSTNAME"]
+      restartPolicy: Always

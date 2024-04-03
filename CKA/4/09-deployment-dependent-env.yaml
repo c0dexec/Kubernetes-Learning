@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+# Type of resource, Deployment
+kind: Deployment
+# Pod details
+metadata:
+  name: ubuntu-deployment
+  namespace: alpha
+# Pod specs
+spec:
+  replicas: 1
+  # Pod management requirements for ReplicaSets
+  selector:
+    matchLabels:
+      tier: backend
+  # Template for Pods, metadata which contains its lables
+  template:
+    metadata:
+      labels:
+        tier: backend
+    # Container spec
+    spec:
+      containers:
+        - name: ubuntu
+          image: ubuntu
+          # Dependent Environment variables variables being specifed to create env var "SERIVCE_ADDRESS".
+          env:
+          # The order matters here, as dependant variables need to be defined before "SERIVICE_ADDRESS"
+          - name: PROTOCOL
+            value: "https"
+          - name: SERVICE_PORT
+            value: "80"
+          - name: SERVICE_IP
+            value: "172.17.0.1"
+          - name: SERVICE_ADDRESS
+            value: "$(PROTOCOL)://$(SERVICE_IP):$(SERVICE_PORT)"
+          # Lists environment variables
+          command: ["tail"]
+          args: ["-f","/dev/null"]
+      restartPolicy: Always

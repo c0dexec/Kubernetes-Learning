@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+# Type of resource, Deployment
+kind: Deployment
+# Pod details
+metadata:
+  name: curl-deployment
+  namespace: alpha
+# Pod specs
+spec:
+  replicas: 1
+  # Pod management requirements for ReplicaSets
+  selector:
+    matchLabels:
+      env: debug
+  # Template for Pods, metadata which contains its lables
+  template:
+    metadata:
+      labels:
+        env: debug
+    # Container spec
+    spec:
+      containers:
+        - name: curl-container
+          image: rancher/curlimages-curl:7.73.0
+          # Lists environment variables
+          command: ["/bin/sh"]
+          args: ["-c", "curl https://www.whizlabs.com && sleep 360"]

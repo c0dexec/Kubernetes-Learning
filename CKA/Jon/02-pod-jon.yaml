@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+# Type of resource, Deployment
+kind: Deployment
+# Pod details
+metadata:
+  name: jon-deployment
+# Pod specs
+spec:
+  replicas: 5
+  # Pod management requirements for ReplicaSets
+  selector:
+    matchLabels:
+      repo: private
+  # Template for Pods, metadata which contains its lables
+  template:
+    metadata:
+      labels:
+        repo: private
+    # Container spec
+    spec:
+      containers:
+        - name: jonpod
+          image: jdimitrakopoulos1/labs
+          resources:
+            limits:
+              memory: "100Mi"
+              cpu: "250m"
+            requests:
+              memory: "50Mi"
+              cpu: "100m"
+          command: ["tail"]
+          args: ["-f", "/dev/null"]
+      restartPolicy: Always

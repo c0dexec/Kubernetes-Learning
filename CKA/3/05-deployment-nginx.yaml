@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+# Deployment type.
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: alpha
+spec:
+  # 3 Pods will be executed which are replica of each other. Everything under are pod specifications.
+  replicas: 3
+  # ".spec.selector" field defines how the created "ReplicaSet" finds which Pods to manage.
+  # It also means, it finds the pods which are managed by the deployment object "nginx-deployment".
+  # Deployment > RelicaSets > Pods, Hierarchy of Deployment.
+  selector:
+    matchLabels:
+      env: staging
+      tier: frontend
+  # Template for Pods being created
+  template:
+    metadata:
+      # Thus Pods contain the labels listed below.
+      labels:
+        env: staging
+        tier: frontend
+    # Running an nginx service and exposing their port "80". Spec for the container
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80

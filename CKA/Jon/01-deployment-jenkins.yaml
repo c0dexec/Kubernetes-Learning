@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+# Type of resource, Deployment
+kind: Deployment
+# Pod details
+metadata:
+  name: jenkins-deployment
+  namespace: alpha
+# Pod specs
+spec:
+  replicas: 1
+  # Pod management requirements for ReplicaSets
+  selector:
+    matchLabels:
+      tier: backend
+  # Template for Pods, metadata which contains its lables
+  template:
+    metadata:
+      labels:
+        tier: backend
+    # Container spec
+    spec:
+      containers:
+        - name: jenkins
+          image: jenkins/jenkins:2.414.2-jdk11
+          resources:
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+            requests:
+              memory: "500Mi"
+              cpu: "500m"
+          # Lists environment variables
+          ports:
+            - name: httpport
+              containerPort: 8080
+              hostPort: 8080
+            - name: jnlpport
+              containerPort: 50000
+              hostPort: 50000
+          livenessProbe:
+            httpGet:
+              path: "/login"
+              port: 8080
+            initialDelaySeconds: 90
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: "/login"
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-service
+  namespace: alpha
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 32000
+  selector:
+    tier: jenkins-server
