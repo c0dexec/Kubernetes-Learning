@@ -108,7 +108,8 @@ spec:
     - port: 3000
       protocol: TCP
       targetPort: http-grafana
-  clusterIP: 10.233.0.10
+      # nodePort: 30000
+  clusterIP: 10.233.0.30
   selector:
     app: grafana
   sessionAffinity: None
@@ -116,4 +117,4 @@ spec:
 status:
   loadBalancer:
     ingress:
-    - ip: 11.1.0.17
+    - ip: 11.1.0.15

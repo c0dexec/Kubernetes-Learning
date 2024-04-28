@@ -1,0 +1,2 @@
+# Adding features via Kubespray
+- Added features such as HELM, cert-manager, etc. By making changes to `inventory/sample/group_vars/k8s_cluster/addons.yml`. Then by executing these changes via tags `ansible-playbook --become-user=root --tags cert-manager,ingress-controller -i ~/kubespray/inventory/sample/hosts.ini cluster.yml`.

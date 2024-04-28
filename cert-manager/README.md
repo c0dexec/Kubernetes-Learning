@@ -1,0 +1,2 @@
+# Things to remember
+- LetsEncrypt Prod are the ones which are trsuted by browser which is the expected behaviour, staging is not. [Reference](https://cert-manager.io/docs/tutorials/acme/nginx-ingress/#step-6---configure-a-lets-encrypt-issuer) 
