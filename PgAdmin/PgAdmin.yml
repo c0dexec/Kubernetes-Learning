@@ -4,6 +4,7 @@ metadata:
   labels:
     app: pgadmin
   name: pgadmin
+  namespace: my-pgadmin
 spec:
   selector:
     matchLabels:
@@ -36,7 +37,7 @@ spec:
             - name: PGADMIN_DEFAULT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysecret
+                  name: pgadmin-pass
                   key: password
           ports:
             - containerPort: 80
