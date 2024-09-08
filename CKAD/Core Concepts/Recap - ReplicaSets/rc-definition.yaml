@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ReplicationController
+metadata: # ReplicationController metadata
+  name: myapp-rc
+  labels:
+    app: myapp
+    type: front-end
+spec: # ReplicationController specification
+  template: # Set the template for the Pods and their replicas
+    metadata: # Pod metadata
+      name: myapp-pod # String value, Pod name
+      namespace: ckad-practice # Namespace here doesn't apply'
+      labels: # Dictonary
+        app: myapp
+        type: front-end
+    spec: # Pod specification
+      containers: # List/Array
+        - name: nginx-container # First item, Container name
+          image: nginx
+  replicas: 3 

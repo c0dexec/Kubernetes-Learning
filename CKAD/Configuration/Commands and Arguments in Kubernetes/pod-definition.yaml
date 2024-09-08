@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ubuntu-sleeper-pod
+spec:
+  containers:
+    - name: ubuntu-sleeper
+      image: ubuntu-sleeper
+      command: ["sleep"] # Corresponds to ENTRYPOINT instruction in a Dockerfile 
+      args: ["10"] # Corresponds to CMD instruction of a Dockerfile

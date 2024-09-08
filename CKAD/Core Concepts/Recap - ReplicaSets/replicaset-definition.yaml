@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: myapp-replicaset
+  labels:
+    apps: myapp
+    type: front-end
+spec:
+  template:
+# Pod definition
+    metadata:
+      name: myapp-pod # String value, Pod name
+      namespace: ckad-practice
+      labels: # Dictonary
+        app: myapp
+        type: front-end
+    spec:
+      containers: # List/Array
+        - name: nginx-container # First item, Container name
+          image: nginx
+  replicas: 3
+  selector:
+    matchLabels:
+      type: front-end

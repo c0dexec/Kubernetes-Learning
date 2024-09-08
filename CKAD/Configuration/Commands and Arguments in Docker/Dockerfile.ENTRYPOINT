@@ -1,0 +1,4 @@
+FROM Ubuntu
+
+# Default program used on startup
+ENTRYPOINT ["sleep"]

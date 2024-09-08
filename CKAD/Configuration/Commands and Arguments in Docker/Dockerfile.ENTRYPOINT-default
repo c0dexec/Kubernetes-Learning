@@ -1,0 +1,7 @@
+FROM Ubuntu
+
+# Default program used on startup
+ENTRYPOINT ["sleep"]
+
+# Default argument passed to ENTRYPOINT instruction
+CMD ["5"]

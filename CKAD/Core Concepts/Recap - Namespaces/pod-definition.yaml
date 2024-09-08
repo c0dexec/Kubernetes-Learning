@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod # String value, Pod name
+  namespace: ckad-practice
+  labels: # Dictonary
+    app: myapp
+    type: front-end
+spec:
+  containers: # List/Array
+    - name: nginx-container # First item, Container name
+      image: nginx
