@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  name: math-add-job
+spec:
+  completion: 4 # Threshold value for jobs to be marked as complete
+  parallelism: 4 # Allows parallelism to perform task.
+  template: # Pod template
+    metadata:
+      creationTimestamp: null
+    spec:
+      containers:
+      - command:
+        - expr
+        - "3"
+        - +
+        - "2"
+        image: ubuntu
+        name: math-add-job
+        resources: {}
+      restartPolicy: Never # Jobs run to completion and don't restart.
+status: {}

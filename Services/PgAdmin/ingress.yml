@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: padmin-ingress
+  namespace: my-pgadmin
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: "nginx"
+  tls:
+    - hosts:
+        - pgadmin.c0dexec.dev
+      secretName: pgadmin-certs
+  rules:
+    - host: pgadmin.c0dexec.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: pgadmin
+                port:
+                  number: 80

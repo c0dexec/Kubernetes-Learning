@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: simple-webapp
+  name: simple-webapp
+spec:
+  containers:
+  - image: simple-webapp
+    name: simple-webapp
+    ports:
+    - containerPort: 8080
+    resources: {}
+  readinessProbe:
+    httpGet: # HTTP probe
+      path: /api/ready
+      port: 8080
+    initialDelaySeconds: 10 # Adds a delay for 10 seconds before probing
+    failureTreshold: 5 # Minimum consecutive failures for the probe to be considered failed after having succeeded
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}

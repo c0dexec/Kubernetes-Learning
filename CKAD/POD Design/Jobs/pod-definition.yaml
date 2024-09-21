@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: math-pod
+  name: math-pod
+spec:
+  containers:
+  - command:
+    - expr
+    - "3"
+    - +
+    - "2"
+    image: ubuntu
+    name: math-pod
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}

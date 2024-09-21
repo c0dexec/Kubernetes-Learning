@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: db-policy
+spec:
+  podSelector:
+    matchLabels:
+      role: db # Pod to which this policy applies to.
+    policyTypes:
+      - Ingress # Only need to restrict incoming traffic.
+    ingress:
+      - from:
+        - ipBlock: # Rule number 1, this could have been combined with the other rule aswell. Allowing IP address outside  Kubernetes cluster. 
+          cidr: "192.168.5.10/32"
+        - namespaceSelector: # Rule Number 2. This rule specifically allows Pods "api-pod" label from "prod" label namespaces
+            matchLabels:
+              name: prod # Label set on the namespace
+          podSelector:
+            matchLabels:
+              name: api-pod # Name of the Pod where the traffic orginates
+          ports:
+        - port: 3306
+          protocol: TCP

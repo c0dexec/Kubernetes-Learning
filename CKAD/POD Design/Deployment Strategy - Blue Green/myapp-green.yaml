@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: myapp-green
+    type: front-end
+  name: myapp-green
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      version: v2
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        version: v2
+    spec:
+      containers:
+      - image: myapp-image:2.0
+        name: myapp-image
+        resources: {}
+status: {}

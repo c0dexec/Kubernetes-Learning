@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+spec:
+  containers:
+    - name: data-processor
+      image: data-processor
+  affinity: # Similar to `nodeSelector` but allows the usage of Operators.
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution: # If affinity requirements do not meet during the scheduling then pod is not scheduled on the node.
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: size # Can specify multiple keys
+              operator: In
+              values: # Can specify mutiple values
+                - Large

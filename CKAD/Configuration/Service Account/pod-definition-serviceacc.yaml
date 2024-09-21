@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-kubernetes-dashboard
+spec:
+  containers:
+    - name: my-kubernetes-dashboard
+      image: my-kubernetes-dashboard
+  serviceAccountName: dashboard-sa # Pod using service account
+  automountServiceAccountToken: false # Setting automatic service account token mount to be "false" for "default" user. Usually is "true" by default.
