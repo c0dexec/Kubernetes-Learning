@@ -13,3 +13,6 @@
 
 **/*.conf
 **/*.env
+**/*.Identifier
+**/passgen.sh
+**/descriptions/prerequisite.yaml

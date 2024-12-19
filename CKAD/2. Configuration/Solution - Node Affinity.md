@@ -1,0 +1,2 @@
+- Which nodes can the deployment Pods be place on?
+	- Checked the Node taints to see if any are tainted as by default the deployment doesn't have any tolerations set.

@@ -1,0 +1,2 @@
+- `kubectl create service` - This will not use the pods' labels as selectors.
+- `kubectl expose pod` - This will automatically use the pod's labels as selectors. But doesn't have ability to specify NodePort. 

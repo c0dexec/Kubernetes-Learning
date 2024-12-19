@@ -1,0 +1,7 @@
+- [How to remove indentation (Shift + Tab equivalent)](https://stackoverflow.com/a/4560339)
+- [Auto indent](https://unix.stackexchange.com/a/19963)
+- [Directory viewing](https://stackoverflow.com/a/9160582)
+- [Comment multiple lines](https://stackoverflow.com/a/1676690)([Note for Windows](https://stackoverflow.com/questions/1676632/whats-a-quick-way-to-comment-uncomment-lines-in-vim#comment1550642_1676690))
+- VIM directory navigation
+	- https://stackoverflow.com/a/9160582
+	- https://stackoverflow.com/a/2384000

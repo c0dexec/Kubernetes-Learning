@@ -1,0 +1,8 @@
+1. 
+```
+k run busybox-pods --image busybox $dry --command -- "/bin/sh" "-c" "echo hello; sleep 3600;" > busybox-pods-definition.yaml;
+# Edit the YAML file to have two containers called "bb-ctnr1" and "bb-ctnr2".
+k exec busybox-pods -c bb-ctnr2 -- ls
+```
+2.
+Created a pod and then added an `initContainer` with the requirements.

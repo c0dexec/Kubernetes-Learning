@@ -1,0 +1,2 @@
+- Create a POD in the finance namespace.
+	- `kubectl run redis --image redis -n finance`

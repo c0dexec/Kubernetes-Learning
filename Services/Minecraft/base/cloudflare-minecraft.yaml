@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minecraft-cloudflare-tunnel
+spec:
+  selector:
+    matchLabels:
+      server: mc
+  template:
+    metadata:
+      labels:
+        server: mc
+        app.kubernetes.io/component: minecraft
+    spec:
+      containers:
+        - name: minecraft-cloudflare-tunnel
+          image: cloudflare/cloudflared:latest
+          env:
+            - name: token
+              valueFrom:
+                secretKeyRef:
+                  key: "tunnel_token"
+                  name: "minecraft-cloudflare-token"
+          command: ["cloudflared"]
+          args: ["--no-autoupdate", "tunnel", "--no-autoupdate", "run", "--token", "$(token)"]
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "90Mi"
+              cpu: "100m"

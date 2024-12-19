@@ -1,0 +1,1 @@
+5. `k get rs -o jsonpath='{.items[*].spec.template.spec.containers[*].image}'` or `k describe rs  new-replica-set`

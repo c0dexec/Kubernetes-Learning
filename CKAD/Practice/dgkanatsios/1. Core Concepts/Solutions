@@ -1,0 +1,59 @@
+1.
+```
+k create namespace mynamespace;
+k run pod -n mynamespace nginx --image nginx;
+```
+
+2.
+```
+k run pod -n mynamespace nginx --image nginx --dry-run=client -o yaml > pod.yaml;
+k create -f pod.yaml
+```
+
+3.
+```
+ k run pod -n mynamespace busybox-pod --image busybox --dry-run=client -o yaml --command -- "/bash/sh" "-c" "env"
+```
+
+6.
+```
+kubectl create quota myrq --hard=cpu=1,memory=1G,pods=2 --dry-run=client -o yaml
+```
+
+7.
+```
+k get pods -A
+```
+
+10.
+
+```
+k set image pods/nginx nginx=nginx:1.24.0;
+k describe pods nginx; # To see the Pod restart
+k get pods nginx -w; # Or watch Pod's status
+```
+
+11.
+```
+kubectl logs nginx -p;
+# or
+kubectl logs nginx --previous;
+```
+
+12.
+```
+k run echo-pod --image busybox $dry --restart Never --command -- "/bin/sh" "-c" "echo 'hello world'"
+```
+
+13.
+```
+k run echo-pod --image busybox -it --restart Never --rm --command -- "/bin/sh" "-c" "echo 'hello world'"; # `-it` Flag is used to make the session interactive so `--rm` flag can be used
+```
+
+14.
+```
+k run nginx --image nginx --env="var1=val1" -it --rm --command -- "env"; # Create Pod and then execute `env` to check if value exists and then perform cleanup.
+# Or
+k run nginx --image nginx --env="var1=val1" --command -- "env"; # Create Pod with value
+k decscribe pods nginx | grep val1; # Describe and see if value exists
+```

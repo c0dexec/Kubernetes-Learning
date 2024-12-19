@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+   name: mypod
+spec:
+   containers:
+     - name: number-container
+       image: alpine:latest
+       volumeMounts:
+       - mountPath: "/mnt/data"
+         name: mypd
+   volumes:
+     - name: mypd
+       persistentVolumeClaim:
+         claimName: nfs-claim

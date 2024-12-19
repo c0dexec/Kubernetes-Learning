@@ -1,0 +1,5 @@
+ - Fix the original replica set `new-replica-set` to use the correct `busybox` image.
+	 - `kubectl edit rs new-replica-set`
+		 - Manually delete the pods or delete
+	- `kubectl get rs new-replica-set -o yaml > new-replica-set.yaml`
+		- Then delete the replica set and recreate it.

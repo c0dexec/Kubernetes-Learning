@@ -1,0 +1,6 @@
+1.
+```
+k run nginx1 --image nginx -l "app=v1" $dry
+k run nginx2 --image nginx -l "app=v1" $dry
+k run nginx3 --image nginx -l "app=v1" $dry
+```

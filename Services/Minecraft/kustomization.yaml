@@ -1,0 +1,13 @@
+nameSuffix: "-forge"
+namespace: minecraft
+commonLabels:
+  server: forge
+resources:
+  - base
+configMapGenerator:
+  - name: mc
+    envs:
+      - mc.env
+patches:
+  # Example of using a patch to set external service name for mc-router to pick up
+  - path: set-external-servername.yaml

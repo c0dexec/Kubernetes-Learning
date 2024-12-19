@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vaultwarden-cloudflare-tunnel
+  namespace: vaultwarden
+spec:
+  selector:
+    matchLabels:
+      service: vaultwarden
+  template:
+    metadata:
+      labels:
+        service: vaultwarden
+        app.kubernetes.io/component: vaultwarden
+    spec:
+      containers:
+        - name: vaultwarden-cloudflare-tunnel
+          image: cloudflare/cloudflared:latest
+          env:
+            - name: token
+              valueFrom:
+                secretKeyRef:
+                  key: "tunnel_token"
+                  name: "cloudflare-token"
+          command: ["cloudflared"]
+          args: ["--no-autoupdate", "tunnel", "--no-autoupdate", "run", "--token", "$(token)"]
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "90Mi"
+              cpu: "100m"

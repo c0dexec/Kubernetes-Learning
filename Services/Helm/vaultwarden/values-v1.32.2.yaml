@@ -13,16 +13,16 @@ image:
   ## @param image.tag Vaultwarden image tag
   ## Ref: https://hub.docker.com/r/vaultwarden/server/tags
   ##
-  tag: "latest-alpine"
+  tag: "1.32.2-alpine"
   ## @param image.pullPolicy Vaultwarden image pull policy
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: Always
-  ## @param image.pullSecrets Specify docker-registry secret names
+  ## @param image.pullSecrets Specify docker-registry secrets
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ## Example:
   ## pullSecrets:
-  ##   - myRegistryKeySecretName
+  ##   - name: myRegistryKeySecretName
   ##
   pullSecrets: []
   ## @param image.extraSecrets Vaultwarden image extra secrets
@@ -102,13 +102,15 @@ serviceAccount:
 
 ## @param podSecurityContext Pod security options
 ##
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 1001
   # supplementalGroups:
   #   - 1001
 
 ## @param securityContext Default security options to run vault as read only container without privilege escalation
-securityContext: {}
+securityContext:
+  {}
   # allowPrivilegeEscalation: false
   # privileged: false
   # readOnlyRootFilesystem: true
@@ -123,6 +125,10 @@ securityContext: {}
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
 dnsConfig: {}
 
+## @param enableServiceLinks Enable service links, Kubernetes default is true
+## Ref: https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service
+##
+enableServiceLinks: true
 
 ## @section Reliability configuration
 ##
@@ -148,6 +154,9 @@ livenessProbe:
   ## @param livenessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed
   ##
   failureThreshold: 10
+  ## @param livenessProbe.path Path on which the probe is exposed, default is "/alive". Replace when using non-root path deployment
+  ##
+  path: /alive
 
 ## Readiness probe configuration
 ##
@@ -170,6 +179,9 @@ readinessProbe:
   ## @param readinessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed
   ##
   failureThreshold: 3
+  ## @param readinessProbe.path Path on which the probe is exposed, default is "/alive". Replace when using non-root path deployment
+  ##
+  path: /alive
 
 ## Startup probe configuration
 ##
@@ -192,10 +204,14 @@ startupProbe:
   ## @param startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed
   ##
   failureThreshold: 10
+  ## @param startupProbe.path Path on which the probe is exposed, default is "/alive". Replace when using non-root path deployment
+  ##
+  path: /alive
 
 ## @param resources Resource configurations
 ##
-resources: {}
+resources:
+  {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -209,7 +225,8 @@ resources: {}
 
 ## @param strategy Resource configurations
 ##
-strategy: {}
+strategy:
+  {}
   # type: RollingUpdate
   # rollingUpdate:
   #   maxSurge: 1
@@ -225,7 +242,6 @@ podDisruptionBudget:
   ## @param podDisruptionBudget.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   maxUnavailable: null
 
-
 ## @section Persistent data configuration
 ##
 
@@ -235,16 +251,19 @@ data:
   name: "vaultwarden-data"
   size: "15Gi"
   class: "nfs-sc"
+  keepPvc: true
 
 ## @param attachments Attachments directory configuration, refer to values.yaml for parameters.
 ## By default, attachments/ is located inside the data directory.
 ##
-attachments: {}
+attachments:
+  {}
   # name: "vaultwarden-files"
   # size: "100Gi"
   # class: ""
   # path: /files
   # keepPvc: false
+  # accessMode: "ReadWriteOnce"
 
 ## @param webVaultEnabled Enable Web Vault
 ##
@@ -289,18 +308,43 @@ database:
   ##
   maxConnections: 10
 
-## @section Push notifications
-##
-
-## @param pushNotifications Enable mobile push notifications, see values.yaml for parameters
+## @section Push Notifications
 ## Supported since 1.29.0.
 ## Refer to https://github.com/dani-garcia/vaultwarden/wiki/Enabling-Mobile-Client-push-notification for details
 ##
-pushNotifications: {}
-  # installationId: ""
-  # installationKey: ""
-  # relayUri: "https://push.bitwarden.com"
-  # identityUri: "https://identity.bitwarden.com"
+pushNotifications:
+  ## @param pushNotifications.enabled Enable the push notification service
+  ##
+  enabled: false
+  ## @param pushNotifications.existingSecret Name of an existing secret containing the Bitwarden installation id and key
+  ##
+  existingSecret: "push-notification"
+  installationId:
+    ## @param pushNotifications.installationId.value Bitwarden installation id string
+    ## Example: installationIdGoesHere
+    ##
+    value: ""
+    ## @param pushNotifications.installationId.existingSecretKey When using an existing secret, specify the key which contains the installation id.
+    ## Example: INSTALLATION_ID
+    ##
+    existingSecretKey: "PUSH_INSTALLATION_ID"
+  installationKey:
+    ## @param pushNotifications.installationKey.value Bitwarden installation key string
+    ## Example: superSecretInstallationKey
+    ##
+    value: ""
+    ## @param pushNotifications.installationKey.existingSecretKey When using an existing secret, specify the key which contains the installation key.
+    ## Example: INSTALLATION_KEY
+    ##
+    existingSecretKey: "PUSH_INSTALLATION_KEY"
+  ## @param pushNotifications.relayUri Change Bitwarden relay uri.
+  ## Refer to https://github.com/dani-garcia/vaultwarden/wiki/Enabling-Mobile-Client-push-notification for details
+  ##
+  relayUri: "https://push.bitwarden.com"
+  ## @param pushNotifications.identityUri Change Bitwarden identity uri.
+  ## Refer to https://github.com/dani-garcia/vaultwarden/wiki/Enabling-Mobile-Client-push-notification for details
+  ##
+  identityUri: "https://identity.bitwarden.com"
 
 ## @section Scheduled jobs
 ##
@@ -422,7 +466,6 @@ emailChangeAllowed: "true"
 ##
 showPassHint: "false"
 
-
 ## @section Advanced settings
 ##
 
@@ -507,34 +550,58 @@ timeZone: "America/Toronto"
 ## @param orgGroupsEnabled Controls whether group support is enabled for organizations
 orgGroupsEnabled: "false"
 
-
 ## @section MFA/2FA settings
 ##
 
 ## Yubico (Yubikey) settings
+## Reference: https://github.com/dani-garcia/vaultwarden/wiki/Enabling-Yubikey-OTP-authentication
+##
 yubico:
   ## @param yubico.clientId Yubico client ID
   ##
   clientId: ""
-  ## @param yubico.secretKey Yubico secret key
+  ## @param yubico.existingSecret Name of an existing secret containing the Yubico secret key. Also set yubico.secretKey.existingSecretKey.
   ##
-  secretKey: ""
+  existingSecret: ""
+  ## Yubico secret key
+  ##
+  secretKey:
+    ## @param yubico.secretKey.value secretKey plain text
+    ## Example: ABCDEABCDEABCDEABCDE=
+    ##
+    value: ""
+    ## @param yubico.secretKey.existingSecretKey When using an existing secret, specify the key which contains the secretKey.
+    ## Example: YUBICO_SECRET_KEY
+    ##
+    existingSecretKey: ""
   ## @param yubico.server Specify a Yubico server, otherwise the default servers will be used
   ##
   server: ""
 
 ## Duo settings
+## Reference: https://help.bitwarden.com/article/setup-two-step-login-duo/#create-a-duo-security-account
+##
 duo:
-  ## @param duo.ikey Duo Integration Key
+  ## @param duo.iKey Duo Integration Key
   ##
-  ikey: ""
-  ## @param duo.secretKey Duo Secret Key
+  iKey: ""
+  ## @param duo.existingSecret Name of an existing secret containing the Duo skey. Also set duo.sKey.existingSecretKey.
   ##
-  secretKey: ""
+  existingSecret: ""
+  ## Duo secret key
+  ##
+  sKey:
+    ## @param duo.sKey.value sKey plain text
+    ## Example: ABCDEABCDEABCDEABCDE=
+    ##
+    value: ""
+    ## @param duo.sKey.existingSecretKey When using an existing secret, specify the key which contains the sKey.
+    ## Example: DUO_SKEY
+    ##
+    existingSecretKey: ""
   ## @param duo.hostname Duo API hostname
   ##
   hostname: ""
-
 
 ## @section SMTP Configuration
 ##
@@ -599,18 +666,8 @@ smtp:
   ##
   debug: false
 
-
 ## @section Exposure settings
 ##
-
-## @param websocket.enabled Enable websocket notifications
-## @param websocket.address Websocket listen address
-## @param websocket.port Websocket listen port
-##
-websocket:
-  enabled: true
-  address: "0.0.0.0"
-  port: 3012
 
 ## @param rocket.address Address to bind to
 ## @param rocket.port Rocket port
@@ -641,15 +698,15 @@ service:
 ingress:
   ## @param ingress.enabled Deploy an ingress resource.
   ##
-  enabled: true
+  enabled: false
   ## @param ingress.class Ingress resource class
   ## The Ingress class to use, e. g. "nginx" for a nginx ingress controller or "alb" for a AWS LB controller.
   #
   class: "nginx"
   ## @param ingress.nginxIngressAnnotations Add nginx specific ingress annotations
-  ## This annotations are only makes sense for the kubernetes nginx ingress controller (https://kubernetes.github.io/ingress-nginx/)
+  ## These annotations only make sense for the kubernetes nginx ingress controller (https://kubernetes.github.io/ingress-nginx/)
   ##
-  nginxIngressAnnotations: false
+  nginxIngressAnnotations: true
   ## @param ingress.additionalAnnotations Additional annotations for the ingress resource.
   ##
   additionalAnnotations: {}
@@ -669,26 +726,22 @@ ingress:
   ## @param ingress.path Default application path for the ingress
   ##
   path: "/"
-  ## @param ingress.pathWs Path for the websocket ingress
-  ##
-  pathWs: "/notifications/hub"
   ## @param ingress.pathType Path type for the ingress
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   pathType: "Prefix"
-  ## @param ingress.pathTypeWs Path type for the ingress
-  ## Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
-  ##
-  pathTypeWs: "Exact"
   ## @param ingress.tlsSecret Kubernetes secret containing the SSL certificate when using the "nginx" class.
   ##
   tlsSecret: "vaultwarden-tls"
   ## @param ingress.nginxAllowList Comma-separated list of IP addresses and subnets to allow.
   ##
-  nginxAllowList: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
+  nginxAllowList: ""
+  ## @param ingress.customHeadersConfigMap ConfigMap containing custom headers to be added to the ingress.
+  ## Requirement: First define the allowed response headers in global-allowed-response-headers.
+  ## Ref: https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#custom-headers
+  ##
+  customHeadersConfigMap: {}
   ## TODO:
   ##   - Add support for using cert-manager.
   ##   - Support for multiple TLS hostnames.
   ##
-  
-

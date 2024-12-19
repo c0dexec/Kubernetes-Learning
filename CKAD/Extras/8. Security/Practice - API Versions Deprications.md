@@ -1,0 +1,10 @@
+- Shortform for deployments, replicasets, cronjobs, customresourcedefinitions.
+	- `kubectl api-resources`
+- Patch number in Kubernetes `1.22.2` version is?
+	- `2`
+- `k explain jobs`
+- `k api-versions`, shows list of preferred API versions
+	- `k proxy; curl http://localhost:8001/apis/authorization.k8s.io`
+- [Installing `kubectl convert`](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-kubectl-convert-plugin)
+- `k convert -f ./ingress-old.yaml --output-version=networking.k8s.io/v1 > update-ingress.yaml`
+	- `k create -f update-ingress.yaml`

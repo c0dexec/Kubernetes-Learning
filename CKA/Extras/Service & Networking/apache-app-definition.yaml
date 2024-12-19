@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: apache-deployment
+  name: apache-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: apache-deployment
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: apache-deployment
+    spec:
+      containers:
+      - image: bitnami/apache
+        name: apache
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: apache-service
+  name: apache-service
+spec:
+  ports:
+  - name: 8080-80
+    port: 8080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: apache-deployment
+  type: NodePort
+status:
+  loadBalancer: {}

@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: busybox-pods
+  name: busybox-pods
+spec:
+  containers:
+  - command:
+    - /bin/sh
+    - -c
+    - echo hello; sleep 3600;
+    image: busybox
+    name: bb-ctnr1
+    resources: {}
+  - command:
+    - /bin/sh
+    - -c
+    - echo hello; sleep 3600;
+    image: busybox
+    name: bb-ctnr2
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}

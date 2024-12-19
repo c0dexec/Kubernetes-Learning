@@ -1,0 +1,2 @@
+- `k get pods webapp -o jsonpath='{.spec.containers[*].image}'`
+- `k set image pods/redis redis=redis` set image for Pod.

@@ -1,0 +1,12 @@
+- Service Account (using correct service account, role binding, roles, etc)
+- Resource limits, (namespace resource limit, resource quota, limitrange)
+- Cronjob and Job (create cronjob and then use job to exectue)
+	- 2 minutes
+	- no restarts
+	- 2 execution
+	- 
+- Ingress, Service and Deployment question (service targetPort configured wrong, Ingress wrong service name was used.)
+- maxSurge maxUnavailable (change values)
+	- change deployment image (`k set image deploy)
+	- Rollback deplyoment
+- 
